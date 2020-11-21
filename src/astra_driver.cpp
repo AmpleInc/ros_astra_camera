@@ -225,6 +225,7 @@ void AstraDriver::advertiseROSTopics()
   ir_info_manager_  = boost::make_shared<camera_info_manager::CameraInfoManager>(ir_nh,  ir_name,  ir_info_url_);
 
   get_serial_server = nh_.advertiseService("get_serial", &AstraDriver::getSerialCb, this);
+  get_num_of_connected_devices_server = nh_.advertiseService("get_num_of_connected_devices", &AstraDriver::getConnectedNumberOfDevicesCb, this);
   get_device_type_server = nh_.advertiseService("get_device_type", &AstraDriver::getDeviceTypeCb, this);
   get_ir_gain_server = nh_.advertiseService("get_ir_gain", &AstraDriver::getIRGainCb, this);
   set_ir_gain_server = nh_.advertiseService("set_ir_gain", &AstraDriver::setIRGainCb, this);
@@ -245,6 +246,12 @@ void AstraDriver::advertiseROSTopics()
 bool AstraDriver::getSerialCb(astra_camera::GetSerialRequest& req, astra_camera::GetSerialResponse& res)
 {
   res.serial = device_manager_->getSerial(device_->getUri());
+  return true;
+}
+
+bool AstraDriver::getConnectedNumberOfDevicesCb(astra_camera::GetConnectedNumberOfDevicesRequest& req, astra_camera::GetConnectedNumberOfDevicesResponse& res)
+{
+  res.num = int(device_manager_->getNumOfConnectedDevices());
   return true;
 }
 
